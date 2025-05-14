@@ -1,7 +1,42 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PID_Control_Playground.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="maxInputFlowRate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="beginningInputFlowRate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="outputFlowRate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="beginingTankLevel" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="setPointLevel" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="proportionalConstant" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0.07</Value>
+    </Setting>
+    <Setting Name="integralConstant" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0.002</Value>
+    </Setting>
+    <Setting Name="derivativeConstant" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">-0.15</Value>
+    </Setting>
+    <Setting Name="tankMaximumConstant" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="cyclesToSimulate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="cyclesBetweenInputFlowRateUpdate" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="itemsToGraph" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Set Point,Current Level</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

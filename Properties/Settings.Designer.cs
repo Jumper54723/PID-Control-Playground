@@ -8,22 +8,162 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PID_Control_Playground.Properties
-{
-
-
+namespace PID_Control_Playground.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public decimal maxInputFlowRate {
+            get {
+                return ((decimal)(this["maxInputFlowRate"]));
+            }
+            set {
+                this["maxInputFlowRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal beginningInputFlowRate {
+            get {
+                return ((decimal)(this["beginningInputFlowRate"]));
+            }
+            set {
+                this["beginningInputFlowRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public decimal outputFlowRate {
+            get {
+                return ((decimal)(this["outputFlowRate"]));
+            }
+            set {
+                this["outputFlowRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public decimal beginingTankLevel {
+            get {
+                return ((decimal)(this["beginingTankLevel"]));
+            }
+            set {
+                this["beginingTankLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public decimal setPointLevel {
+            get {
+                return ((decimal)(this["setPointLevel"]));
+            }
+            set {
+                this["setPointLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.07")]
+        public decimal proportionalConstant {
+            get {
+                return ((decimal)(this["proportionalConstant"]));
+            }
+            set {
+                this["proportionalConstant"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.002")]
+        public decimal integralConstant {
+            get {
+                return ((decimal)(this["integralConstant"]));
+            }
+            set {
+                this["integralConstant"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-0.15")]
+        public decimal derivativeConstant {
+            get {
+                return ((decimal)(this["derivativeConstant"]));
+            }
+            set {
+                this["derivativeConstant"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public decimal tankMaximumConstant {
+            get {
+                return ((decimal)(this["tankMaximumConstant"]));
+            }
+            set {
+                this["tankMaximumConstant"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public decimal cyclesToSimulate {
+            get {
+                return ((decimal)(this["cyclesToSimulate"]));
+            }
+            set {
+                this["cyclesToSimulate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public decimal cyclesBetweenInputFlowRateUpdate {
+            get {
+                return ((decimal)(this["cyclesBetweenInputFlowRateUpdate"]));
+            }
+            set {
+                this["cyclesBetweenInputFlowRateUpdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Set Point,Current Level")]
+        public string itemsToGraph {
+            get {
+                return ((string)(this["itemsToGraph"]));
+            }
+            set {
+                this["itemsToGraph"] = value;
             }
         }
     }

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.startSimulationButton = new System.Windows.Forms.Button();
             this.tabControlSimulation = new System.Windows.Forms.TabControl();
             this.tabPageSimulation = new System.Windows.Forms.TabPage();
@@ -128,16 +128,16 @@
             // 
             // chart1
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
             this.chart1.Location = new System.Drawing.Point(147, 6);
             this.chart1.Name = "chart1";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.chart1.Series.Add(series3);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(1205, 503);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
@@ -170,7 +170,7 @@
             0,
             0,
             -2147352576});
-            this.numericUpDownDerivativeConstant.ValueChanged += new System.EventHandler(this.numericUpDownConstant_valueChanged);
+            this.numericUpDownDerivativeConstant.ValueChanged += new System.EventHandler(this.numericUpDownPIDConstant_valueChanged);
             // 
             // label1
             // 
@@ -220,7 +220,7 @@
             0,
             0,
             131072});
-            this.numericUpDownProportionalConstant.ValueChanged += new System.EventHandler(this.numericUpDownConstant_valueChanged);
+            this.numericUpDownProportionalConstant.ValueChanged += new System.EventHandler(this.numericUpDownPIDConstant_valueChanged);
             // 
             // numericUpDownIntegralConstant
             // 
@@ -250,7 +250,7 @@
             0,
             0,
             327680});
-            this.numericUpDownIntegralConstant.ValueChanged += new System.EventHandler(this.numericUpDownConstant_valueChanged);
+            this.numericUpDownIntegralConstant.ValueChanged += new System.EventHandler(this.numericUpDownPIDConstant_valueChanged);
             // 
             // tabPageSettings
             // 
@@ -305,8 +305,9 @@
             "Derivative Response"});
             this.checkedListBoxItemsToGraph.Location = new System.Drawing.Point(537, 37);
             this.checkedListBoxItemsToGraph.Name = "checkedListBoxItemsToGraph";
-            this.checkedListBoxItemsToGraph.Size = new System.Drawing.Size(191, 235);
+            this.checkedListBoxItemsToGraph.Size = new System.Drawing.Size(191, 214);
             this.checkedListBoxItemsToGraph.TabIndex = 36;
+            this.checkedListBoxItemsToGraph.SelectedValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label11
             // 
@@ -340,12 +341,13 @@
             0,
             0,
             0});
+            this.numericUpDownCyclesBetweenInputFlowRateUpdate.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(320, 218);
+            this.label10.Location = new System.Drawing.Point(320, 208);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(143, 20);
             this.label10.TabIndex = 33;
@@ -354,7 +356,7 @@
             // numericUpDownCyclesToSimulate
             // 
             this.numericUpDownCyclesToSimulate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDownCyclesToSimulate.Location = new System.Drawing.Point(343, 241);
+            this.numericUpDownCyclesToSimulate.Location = new System.Drawing.Point(343, 230);
             this.numericUpDownCyclesToSimulate.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -373,6 +375,7 @@
             0,
             0,
             0});
+            this.numericUpDownCyclesToSimulate.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label9
             // 
@@ -412,6 +415,7 @@
             0,
             0,
             0});
+            this.numericUpDownTankMaximum.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label7
             // 
@@ -432,7 +436,7 @@
             0,
             0,
             0});
-            this.numericUpDownBeginningTankLevel.Location = new System.Drawing.Point(343, 36);
+            this.numericUpDownBeginningTankLevel.Location = new System.Drawing.Point(343, 37);
             this.numericUpDownBeginningTankLevel.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -451,12 +455,13 @@
             0,
             0,
             0});
+            this.numericUpDownBeginningTankLevel.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(385, 79);
+            this.label8.Location = new System.Drawing.Point(385, 82);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(78, 20);
             this.label8.TabIndex = 27;
@@ -471,7 +476,7 @@
             0,
             0,
             262144});
-            this.numericUpDownSetPoint.Location = new System.Drawing.Point(343, 101);
+            this.numericUpDownSetPoint.Location = new System.Drawing.Point(343, 104);
             this.numericUpDownSetPoint.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -490,6 +495,7 @@
             0,
             0,
             0});
+            this.numericUpDownSetPoint.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label4
             // 
@@ -524,6 +530,7 @@
             this.numericUpDownBeginningInputFlowRate.Name = "numericUpDownBeginningInputFlowRate";
             this.numericUpDownBeginningInputFlowRate.Size = new System.Drawing.Size(120, 26);
             this.numericUpDownBeginningInputFlowRate.TabIndex = 24;
+            this.numericUpDownBeginningInputFlowRate.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // label5
             // 
@@ -573,6 +580,7 @@
             0,
             0,
             0});
+            this.numericUpDownMaxInputRate.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // numericUpDownConstantOutputFlowRate
             // 
@@ -602,13 +610,14 @@
             0,
             0,
             0});
+            this.numericUpDownConstantOutputFlowRate.ValueChanged += new System.EventHandler(this.numericUpDownGeneralSetting_valueChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(130)))), ((int)(((byte)(130)))));
-            this.ClientSize = new System.Drawing.Size(1431, 875);
+            this.ClientSize = new System.Drawing.Size(1431, 671);
             this.Controls.Add(this.tabControlSimulation);
             this.Controls.Add(this.startSimulationButton);
             this.Name = "Form1";
