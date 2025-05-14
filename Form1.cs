@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace PID_Control_Playground
 {
@@ -16,72 +18,216 @@ namespace PID_Control_Playground
         {
             InitializeComponent();
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            chart1.ChartAreas[0].AxisX.Title = "Cycles";
+            chart1.ChartAreas[0].AxisY.Title = "Amplitude";
+
+            for (int i = 0; i < checkedListBoxItemsToGraph.Items.Count; i++)
+            {
+                checkedListBoxItemsToGraph.SetItemChecked(i, true);
+            }
+        }
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            runSimulation();
+        }
+        private void numericUpDownConstant_valueChanged(object sender, EventArgs e)
+        {
+            runSimulation();
+        }
+
+        public class TrackedValues
+        {
+            public List<double> setPoints = new List<double>();
+            public List<double> outputFlowRates = new List<double>();
+            public List<double> currentTankLevels = new List<double>();
+            public List<double> errors = new List<double>();
+            public List<double> inputFlowRates = new List<double>();
+            public List<double> proportionalResponsePoints = new List<double>();
+            public List<double> integralResponsePoints = new List<double>();
+            public List<double> derivativeResponsePoints = new List<double>();
+        }
+        public TrackedValues trackedValues;
+        private void runSimulation()
+        {
             chart1.Series.Clear();
-            System.Windows.Forms.DataVisualization.Charting.Series setPointSeries = chart1.Series.Add("Set Point");
-            System.Windows.Forms.DataVisualization.Charting.Series currentValue = chart1.Series.Add("Current Value");
-            setPointSeries.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            currentValue.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            setPointSeries.BorderWidth = 7;
-            currentValue.BorderWidth = 3;
+            List<System.Windows.Forms.DataVisualization.Charting.Series> chartSeries = intializeSimulationChartSeries();
 
-            double outputFlowRate = 2;
-            double inputFlowRate = 0;
-            double currentTankLevel = 100;
-            double setPointLevel = 100;
-            const double ProportionalConstant = 0.2;
-            const double IntegralConstant = 0.0005;
-            const double derivitiveConstant = 0.1;
+            double maxInputFlowRate = (double)numericUpDownMaxInputRate.Value;
+            double inputFlowRate = (double)numericUpDownBeginningInputFlowRate.Value;
+            double outputFlowRate = (double)numericUpDownConstantOutputFlowRate.Value;
+            double currentTankLevel = (double)numericUpDownBeginningTankLevel.Value;
+            double setPointLevel = (double)numericUpDownSetPoint.Value;
+            double ProportionalConstant = (double)numericUpDownProportionalConstant.Value;
+            double IntegralConstant = (double)numericUpDownIntegralConstant.Value;
+            double derivitiveConstant = (double)numericUpDownDerivativeConstant.Value;
+            double tankMaximumConstant = (double)numericUpDownTankMaximum.Value;
+            double cyclesToSimulate = (double)numericUpDownCyclesToSimulate.Value;
+            double cyclesBetweenInputFlowRateUpdate = (double)numericUpDownCyclesBetweenInputFlowRateUpdate.Value;
 
-            //Random random = new Random();
-            //currentValue.Points.AddXY(i, 10 + random.Next(-1, 2));
+            // Wipe public class trackedValues and add initial values
+            trackedValues = new TrackedValues();
 
-            List<double> errorPoints = new List<double>();
-            errorPoints.Add(0); // add first point of no error
-            double errorSum = 0;
-            double errorSlope;
-            for (int i = 1; i < 1500; i++)
+            // initialize variables used for feedback calculation
+            double errorSum = trackedValues.errors.Sum();
+            double errorSlope = 0;
+            double proportionalResponse = 0;
+            double integralResponse = 0;
+            double derivativeResponse = 0;
+
+            int cyclesBetweenInputFlowRateUpdateCounter = 0;
+            for (int i = 0; i < cyclesToSimulate; i++)
             {
-                if(i == 400)
-                {
-                    setPointLevel = 20;
-                }
-                if (i == 800)
-                {
-                    setPointLevel = 170;
-                }
-                setPointSeries.Points.AddXY(i, setPointLevel);
+                cyclesBetweenInputFlowRateUpdateCounter++;
                 currentTankLevel += inputFlowRate - outputFlowRate;
-                // clamp between 0 and 200
-                if(currentTankLevel < 0)
+                // clamp between 0 and tank maximum setting
+                if (currentTankLevel < 0)
                 {
                     currentTankLevel = 0;
                 }
-                else if(currentTankLevel > 200)
+                else if (currentTankLevel > tankMaximumConstant)
                 {
-                    currentTankLevel = 200;
+                    currentTankLevel = tankMaximumConstant;
                 }
-                currentValue.Points.AddXY(i, currentTankLevel);
-                errorPoints.Add(currentTankLevel - setPointLevel);
-                errorSum += errorPoints[i];
-                errorSlope = errorPoints[i - 1] - errorPoints[i];
 
-                // update inflow rate based on PID every 10th loop
-                if (i % 10 == 0)
+                // record all items current values
+                trackedValues.setPoints.Add(setPointLevel);
+                trackedValues.currentTankLevels.Add(currentTankLevel);
+                trackedValues.inputFlowRates.Add(inputFlowRate);
+                trackedValues.outputFlowRates.Add(outputFlowRate);
+                trackedValues.errors.Add(setPointLevel - currentTankLevel);
+                trackedValues.proportionalResponsePoints.Add(proportionalResponse);
+                trackedValues.integralResponsePoints.Add(integralResponse);
+                trackedValues.derivativeResponsePoints.Add(derivativeResponse);
+
+                // chart desired series
+                chartDesiredValues(chartSeries);
+
+                errorSum = trackedValues.errors.Sum(); // used for integral calculation
+                double currentError = trackedValues.errors[trackedValues.errors.Count() - 1]; // pulls current error from where it is saved
+                if (i != 0)
                 {
-                    // input flow rate = ProprtionalResponse + IntegralResponse + DerivitiveResponse
-                    inputFlowRate = -1*ProportionalConstant * errorPoints[i] - IntegralConstant*errorSum - derivitiveConstant*errorSlope; // proportional constant multiplied by current error
-                    
-                    // ensure input flow rate can not be less than 0 (we can't start sucking water out of the tower)
-                    if(inputFlowRate < 0)
+                    double lastError = trackedValues.errors[trackedValues.errors.Count() - 2];
+                    errorSlope = currentError - lastError; // instant slope used  for derivitave calculation
+                }
+                // update inflow rate based on PID every x loop
+                if (cyclesBetweenInputFlowRateUpdateCounter > cyclesBetweenInputFlowRateUpdate)
+                {
+                    cyclesBetweenInputFlowRateUpdateCounter = 0;
+
+                    // calculates responses based on relevant contants
+                    // In this case error is measured based on current value - setpoint
+                    proportionalResponse = ProportionalConstant * currentError;
+                    integralResponse = IntegralConstant * errorSum;
+                    derivativeResponse = derivitiveConstant * errorSlope;
+
+                    inputFlowRate = proportionalResponse + integralResponse + derivativeResponse; 
+
+                    // ensure input flow rate can not be less than 0 or greater than maximum possible
+                    if (inputFlowRate < 0)
                     {
                         inputFlowRate = 0;
+                    }
+                    if (inputFlowRate > maxInputFlowRate)
+                    { 
+                        inputFlowRate = maxInputFlowRate;
                     }
                 }
             }
 
         }
+
+        private List<System.Windows.Forms.DataVisualization.Charting.Series> intializeSimulationChartSeries()
+        {
+            List<System.Windows.Forms.DataVisualization.Charting.Series> chartSeriesToReturn = new List<System.Windows.Forms.DataVisualization.Charting.Series>();
+
+            foreach(string checkedItem in checkedListBoxItemsToGraph.CheckedItems)
+            {
+                System.Windows.Forms.DataVisualization.Charting.Series chartSeries = chart1.Series.Add(checkedItem);
+                chartSeries.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                chartSeries.BorderWidth = 3;
+                chartSeriesToReturn.Add(chartSeries);
+            }
+            chart1.ChartAreas[0].AxisX.Title = "Cycles";
+            chart1.ChartAreas[0].AxisY.Title = "Amplitude";
+
+            return chartSeriesToReturn;
+        }
+        Color[] seriesColors = { 
+            Color.FromArgb(31,119,180),     // Blue
+            Color.FromArgb(255,127,14),     // Orange
+            Color.FromArgb(44,160,44),      // Green
+            Color.FromArgb(214,39,40),      // Red
+            Color.FromArgb(148,103,189),    // Purple
+            Color.FromArgb(140,86,75),      // Brown
+            Color.FromArgb(227,119,194),    // Pink
+            Color.FromArgb(127,127,127)     // Gray
+        };
+        private void chartDesiredValues(List<System.Windows.Forms.DataVisualization.Charting.Series> chartSeries)
+        {
+            int itemNumber = trackedValues.errors.Count() - 1;
+            if(itemNumber == -1)
+            {
+                return;
+            }
+            foreach(Series series in chartSeries)
+            {
+                string name = series.Name;
+                switch(name)
+                {
+                    case "Set Point":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.setPoints[itemNumber]);
+                            series.Color = seriesColors[0];
+                            break;
+                        }
+                    case "Current Level":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.currentTankLevels[itemNumber]);
+                            series.Color = seriesColors[1];
+                            break;
+                        }
+                    case "Input Flow Rate":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.inputFlowRates[itemNumber]);
+                            series.Color = seriesColors[2];
+                            break;
+                        }
+                    case "Output Flow Rate":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.outputFlowRates[itemNumber]);
+                            series.Color = seriesColors[3];
+                            break;
+                        }
+                    case "Error":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.errors[itemNumber]);
+                            series.Color = seriesColors[4];
+                            break;
+                        }
+                    case "Proportional Response":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.proportionalResponsePoints[itemNumber]);
+                            series.Color = seriesColors[5];
+                            break;
+                        }
+                    case "Integral Response":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.integralResponsePoints[itemNumber]);
+                            series.Color = seriesColors[6];
+                            break;
+                        }
+                    case "Derivative Response":
+                        {
+                            series.Points.AddXY(itemNumber + 1, trackedValues.derivativeResponsePoints[itemNumber]);
+                            series.Color = seriesColors[7];
+                            break;
+                        }                     
+                }
+            }
+        }
+
     }
 }
